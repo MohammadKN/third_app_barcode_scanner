@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "927502621054",
+    "firebase_url": "https://test-fire-d975c-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "test-fire-d975c",
+    "storage_bucket": "test-fire-d975c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:927502621054:android:b0d3a47e782519e0557b2f",
+        "android_client_info": {
+          "package_name": "com.example.third_app_barcode_scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "927502621054-nbvjj16qfb7c9se83vkrgmlpg83hscf3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJFJG-msfOPWbvgJPsyBVGlnURmC8-B94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "927502621054-nbvjj16qfb7c9se83vkrgmlpg83hscf3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
