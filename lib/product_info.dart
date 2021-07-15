@@ -27,7 +27,6 @@ class AllProducts extends StatefulWidget {
 class _AllProductsState extends State<AllProducts> {
   @override
   Widget build(BuildContext context) {
-
     final ref = fb.reference().child('Products');
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;

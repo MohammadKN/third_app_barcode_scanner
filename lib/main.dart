@@ -10,12 +10,15 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:third_app_barcode_scanner/add_product.dart';
 import 'package:third_app_barcode_scanner/product_info.dart';
 import 'package:just_audio/just_audio.dart';
+import 'checkout.dart';
 
 
 
 final fb = FirebaseDatabase.instance;
 
 List<Map<dynamic, dynamic>> lists = [];
+
+List currentArr = [];
 
 // ignore: non_constant_identifier_names
 int Index = 0;
@@ -33,6 +36,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     return NeumorphicApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -70,10 +77,9 @@ class _HomePageState extends State<HomePage> {
         resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Navigator.push(context,
-                CupertinoPageRoute(builder: (context) => AddProduct()));
+            checkout();
           },
-          child: Icon(Icons.add,color: Colors.white,),
+          child: Icon(Icons.check,color: Colors.white,),
         ),
         bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
@@ -110,9 +116,12 @@ class _HomePageState extends State<HomePage> {
                       );
                     }
                   ),
-                  Container(
-                    width: screenWidth/6,
-                    child: Icon(CupertinoIcons.list_bullet),
+                  IconButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          CupertinoPageRoute(builder: (context) => AddProduct()));
+                    },
+                    icon: Icon(CupertinoIcons.add_circled),
                   ),
                   Container(
                     width: screenWidth/6,
@@ -138,7 +147,7 @@ class _HomePageState extends State<HomePage> {
                   scanBarcode();
                 },
                 onDoubleTap: () async {
-                  HapticFeedback.selectionClick();
+                  HapticFeedback.mediumImpact();
                   scanBarcodeContinuously();
                 },
                 child: NeumorphicButton(
@@ -209,16 +218,16 @@ class _HomePageState extends State<HomePage> {
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
       "#ff2222", "Done", true, ScanMode.BARCODE)!.listen((barcode) {
         HapticFeedback.selectionClick();
-        List currentArr = [];
-        final product = products.child('Product: $barcode');
+        /*final product = products.child('Product: $barcode');
         product.once().then((DataSnapshot snapshot){
           Map<dynamic, dynamic> values=snapshot.value;
           products.child('Product: $barcode').update({
             'Pieces Left': values["Pieces Left"]-1,
           });
-          currentArr.add(values["Profit Per Piece"]);
-          print(values["Profit Per Piece"]);
-      });
+
+        });*/
+        currentArr.add(barcode);
+        print(currentArr);
       });
   }
 }
