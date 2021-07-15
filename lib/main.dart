@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
                   scanBarcode();
                 },
                 onDoubleTap: () async {
-
+                  HapticFeedback.selectionClick();
                   scanBarcodeContinuously();
                 },
                 child: NeumorphicButton(
@@ -208,6 +208,7 @@ class _HomePageState extends State<HomePage> {
     final products = fb.reference().child('Products');
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
       "#ff2222", "Done", true, ScanMode.BARCODE)!.listen((barcode) {
+        HapticFeedback.selectionClick();
         List currentArr = [];
         final product = products.child('Product: $barcode');
         product.once().then((DataSnapshot snapshot){
