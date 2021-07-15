@@ -304,19 +304,20 @@ class _EditInfoState extends State<EditInfo> {
                         width: screenWidth * 0.30,
                         height: screenHeight * 0.06,
                         child: Center(
-                            child: Text(
-                              'Done',
-                              style: TextStyle(
-                                fontSize:
-                                (screenHeight + screenWidth) / 2 * 0.04,
-                                color: Colors.black54,
-                              ),
-                            )),
+                          child: Text(
+                            'Done',
+                            style: TextStyle(
+                              fontSize:
+                              (screenHeight + screenWidth) / 2 * 0.04,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

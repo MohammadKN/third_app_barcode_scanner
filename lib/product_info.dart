@@ -150,7 +150,7 @@ class _AllProductsState extends State<AllProducts> {
                                             Hero(
                                               tag: 'left',
                                               child: Text(
-                                                "Left: " + lists[index]["Pieces Per Package"],
+                                                "Left: " + lists[index]["Pieces Left"].toString(),
                                               ),
                                             ),
                                             Hero(

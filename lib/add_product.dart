@@ -266,7 +266,7 @@ class _AddProductState extends State<AddProduct> {
                         piecesLeftCount = int.parse(packageCont.text) *
                             int.parse(pieceCont.text);
                       }
-                      else {
+                      else if (piecesLeftCont.text.isNotEmpty){
                         piecesLeftCount = int.parse(piecesLeftCont.text);
                       }
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -282,7 +282,7 @@ class _AddProductState extends State<AddProduct> {
                         packageBuyingPriceCont.text,
                         'Piece Selling Price':
                         pieceSellingPriceCont.text,
-                        'Pieces Left': piecesLeftCount
+                        'Pieces Left': piecesLeftCount,
                       }).then((_) {
                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> HomePage()));
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -340,7 +340,7 @@ class _AddProductState extends State<AddProduct> {
     String scanResult;
     try {
       scanResult = await FlutterBarcodeScanner.scanBarcode(
-          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+          "#ff2222", "Cancel", true, ScanMode.BARCODE);
     } on PlatformException {
       scanResult = 'failed';
     }

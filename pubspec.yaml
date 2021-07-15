@@ -26,6 +26,11 @@ dependencies:
 
   cloud_firestore: ^2.3.0
 
+  just_audio: ^0.7.4
+
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -36,4 +41,7 @@ flutter:
 
 
 assets:
-  - assets/beep.mp3
+  -beeps.mp3
+  -beep_on.mp3
+  -beep.ogg
+  -beep.wav

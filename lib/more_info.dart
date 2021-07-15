@@ -84,6 +84,20 @@ class _MoreInfoState extends State<MoreInfo> {
                       ),
                     ),
                     ListTile(
+                      title: Text('Pieces Left',
+                        style: TextStyle(
+                          fontSize: screenHW/76,
+                          color: brightColor,
+                        ),
+                      ),
+                      trailing: Text(lists[Index]["Pieces Left"].toString(),
+                        style: TextStyle(
+                          fontSize: screenHW/76,
+                          color: darkColor,
+                        ),
+                      ),
+                    ),
+                    ListTile(
                       title: Text('Package Buying Price',
                         style: TextStyle(
                           fontSize: screenHW/76,

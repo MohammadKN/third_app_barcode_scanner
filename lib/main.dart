@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +8,16 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:third_app_barcode_scanner/add_product.dart';
-import 'package:third_app_barcode_scanner/edit_info.dart';
 import 'package:third_app_barcode_scanner/product_info.dart';
-import 'more_info.dart';
+import 'package:just_audio/just_audio.dart';
+
 
 
 final fb = FirebaseDatabase.instance;
 
-
-late final Ref;
-
 List<Map<dynamic, dynamic>> lists = [];
 
+// ignore: non_constant_identifier_names
 int Index = 0;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -49,6 +48,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  late AudioPlayer player;
+
+  @override
+  void initState() {
+    super.initState();
+    player = AudioPlayer();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ref = fb.reference().child('Products');
@@ -87,16 +95,16 @@ class _HomePageState extends State<HomePage> {
                               CupertinoIcons.list_bullet
                           ),
                           onPressed: () {
-                            if (snapshot.hasData) {
-                              lists.clear();
-                              Map<dynamic, dynamic> values =
-                                  snapshot.data!.value;
-                              values.forEach((key, values) {
-                                lists.add(values);
-                              });
-                              Navigator.push(context, CupertinoPageRoute(
-                                  builder: (context) => AllProducts()));
-                            }
+                              if (snapshot.hasData) {
+                                lists.clear();
+                                Map<dynamic, dynamic> values =
+                                    snapshot.data!.value;
+                                values.forEach((key, values) {
+                                  lists.add(values);
+                                });
+                                Navigator.push(context, CupertinoPageRoute(
+                                    builder: (context) => AllProducts()));
+                              }
                           },
                         ),
                       );
@@ -130,6 +138,7 @@ class _HomePageState extends State<HomePage> {
                   scanBarcode();
                 },
                 onDoubleTap: () async {
+
                   scanBarcodeContinuously();
                 },
                 child: NeumorphicButton(
@@ -162,7 +171,6 @@ class _HomePageState extends State<HomePage> {
                       onPressed: () {},
                       child: Text('Scan Barcode'),
                     ),
-
                   ],
                 ),
               ),
@@ -174,48 +182,44 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> scanBarcode() async {
-    final ref = fb.reference().child('Products');
+    final products = fb.reference().child('Products');
     String scanResult;
     try {
       scanResult = await FlutterBarcodeScanner.scanBarcode(
-          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+        "#ff2222", "Cancel", true, ScanMode.BARCODE);
     } on PlatformException {
       scanResult = 'Failed';
     }
     if (!mounted) return;
-    setState(() {
-      ref.child('Product: $scanResult').set({
-        'Pieces Left': int.parse(lists[Index]["Pieces Left"])-1,
+    setState(() async {
+      final product = products.child('Product: $scanResult');
+      product.once().then((DataSnapshot snapshot){
+        Map<dynamic, dynamic> values=snapshot.value;
+        products.child('Product: $scanResult').update({
+          'Pieces Left': values["Pieces Left"]-1,
+        });
       });
     });
   }
 
 
+
   Future<void> scanBarcodeContinuously() async {
-    String scanningResult;
-    try {
-      FlutterBarcodeScanner.getBarcodeStreamReceiver(
-              "#ff6666", "Done", true, ScanMode.BARCODE)!
-          .listen((barcode) async {
-        setState(() {
-
+    final products = fb.reference().child('Products');
+    FlutterBarcodeScanner.getBarcodeStreamReceiver(
+      "#ff2222", "Done", true, ScanMode.BARCODE)!.listen((barcode) {
+        List currentArr = [];
+        final product = products.child('Product: $barcode');
+        product.once().then((DataSnapshot snapshot){
+          Map<dynamic, dynamic> values=snapshot.value;
+          products.child('Product: $barcode').update({
+            'Pieces Left': values["Pieces Left"]-1,
+          });
         });
+      }).
+      onDone(() {
+          
       });
-    } on PlatformException {
-      scanningResult = 'failed';
-    }
-    if (!mounted) return;
-  }
-
-  @override
-  void dispose() {
-    nameCont.dispose();
-    packageCont.dispose();
-    pieceCont.dispose();
-    packageBuyingPriceCont.dispose();
-    pieceSellingPriceCont.dispose();
-    barcodeCont.dispose();
-    super.dispose();
   }
 }
 
