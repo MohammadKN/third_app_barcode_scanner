@@ -13,7 +13,7 @@ final nameContEdt = TextEditingController(),
       packageContEdt = TextEditingController(),
       pieceContEdt = TextEditingController();
 
-late int piecesLeftCount;
+
 
 class stlessEdit extends StatelessWidget {
   const stlessEdit({Key? key}) : super(key: key);
@@ -265,7 +265,7 @@ class _EditInfoState extends State<EditInfo> {
                                 SnackBar(content: Text('Adding')));
                             ref
                                 .child('Product: ${barcodeContEdt.text}')
-                                .set({
+                                .update({
                               'Barcode': barcodeContEdt.text,
                               'Name': nameContEdt.text,
                               'Package Count': packageContEdt.text,
@@ -274,6 +274,8 @@ class _EditInfoState extends State<EditInfo> {
                               packageBuyingPriceContEdt.text,
                               'Piece Selling Price':
                               pieceSellingPriceContEdt.text,
+                              'Profit Per Piece': profitPerPieceEdt(),
+                              'Profit Per Package': profitPerPackageEdt(),
                             }).then((_) {
                               Navigator.push(
                                   context,
@@ -325,3 +327,13 @@ class _EditInfoState extends State<EditInfo> {
     );
   }
 }
+
+String profitPerPieceEdt() => (double.parse(pieceSellingPriceContEdt.text) -
+    double.parse(packageBuyingPriceContEdt.text) /
+        double.parse(pieceContEdt.text))
+    .toStringAsFixed(2);
+
+String profitPerPackageEdt() =>
+    (double.parse(pieceSellingPriceContEdt.text) * double.parse(pieceContEdt.text) -
+        double.parse(packageBuyingPriceContEdt.text))
+        .toStringAsFixed(2);

@@ -16,6 +16,9 @@ final nameCont = TextEditingController(),
     pieceCont = TextEditingController(),
     piecesLeftCont = TextEditingController();
 
+late int piecesLeftCount;
+
+
 class StlessAddProduct extends StatelessWidget {
   const StlessAddProduct({Key? key}) : super(key: key);
 
@@ -283,6 +286,8 @@ class _AddProductState extends State<AddProduct> {
                         'Piece Selling Price':
                         pieceSellingPriceCont.text,
                         'Pieces Left': piecesLeftCount,
+                        'Profit Per Piece': profitPerPiece(),
+                        'Profit Per Package': profitPerPackage(),
                       }).then((_) {
                         Navigator.push(context, CupertinoPageRoute(builder: (context)=> HomePage()));
                         ScaffoldMessenger.of(context).showSnackBar(

@@ -215,10 +215,9 @@ class _HomePageState extends State<HomePage> {
           products.child('Product: $barcode').update({
             'Pieces Left': values["Pieces Left"]-1,
           });
-        });
-      }).
-      onDone(() {
-          
+          currentArr.add(values["Profit Per Piece"]);
+          print(values["Profit Per Piece"]);
+      });
       });
   }
 }
