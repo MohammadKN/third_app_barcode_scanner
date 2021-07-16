@@ -1,18 +1,17 @@
 import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:third_app_barcode_scanner/add_product.dart';
 import 'package:third_app_barcode_scanner/product_info.dart';
-import 'package:just_audio/just_audio.dart';
+
 import 'checkout.dart';
-
-
 
 final fb = FirebaseDatabase.instance;
 
@@ -73,34 +72,35 @@ class _HomePageState extends State<HomePage> {
     double widthBlock = screenWidth / 100;
     return NeumorphicApp(
       debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            checkout();
-          },
-          child: Icon(Icons.check,color: Colors.white,),
-        ),
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          child: Container(
-            height: screenHeight/15,
-            width: screenWidth,
-            color: Color(0xffeeeeee),
-            child: Neumorphic(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FutureBuilder(
-                    future: ref.once(),
-                    builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
-                      return Container(
-                        width: screenWidth / 6,
-                        child: IconButton(
-                          icon: Icon(
-                              CupertinoIcons.list_bullet
-                          ),
-                          onPressed: () {
+      home: FutureBuilder(
+          future: ref.once(),
+          builder: (context, AsyncSnapshot<DataSnapshot> snapshot) {
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              floatingActionButton: FloatingActionButton(
+                onPressed: () {
+                  checkout();
+                },
+                child: Icon(
+                  Icons.check,
+                  color: Colors.white,
+                ),
+              ),
+              bottomNavigationBar: BottomAppBar(
+                shape: CircularNotchedRectangle(),
+                child: Container(
+                  height: screenHeight / 15,
+                  width: screenWidth,
+                  color: Color(0xffeeeeee),
+                  child: Neumorphic(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Container(
+                          width: screenWidth / 6,
+                          child: IconButton(
+                            icon: Icon(CupertinoIcons.list_bullet),
+                            onPressed: () {
                               if (snapshot.hasData) {
                                 lists.clear();
                                 Map<dynamic, dynamic> values =
@@ -108,31 +108,33 @@ class _HomePageState extends State<HomePage> {
                                 values.forEach((key, values) {
                                   lists.add(values);
                                 });
-                                Navigator.push(context, CupertinoPageRoute(
-                                    builder: (context) => AllProducts()));
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) => AllProducts()));
                               }
-                          },
+                            },
+                          ),
                         ),
-                      );
-                    }
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      Navigator.push(context,
-                          CupertinoPageRoute(builder: (context) => AddProduct()));
-                    },
-                    icon: Icon(CupertinoIcons.add_circled),
-                  ),
-                  Container(
-                    width: screenWidth/6,
-                  ),
-                  Container(
-                    width: screenWidth/6,
-                  ),
-                  Container(
-                    width: screenWidth/6,
-                  ),
-                ],
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => AddProduct()));
+                          },
+                          icon: Icon(CupertinoIcons.add_circled),
+                        ),
+                        Container(
+                          width: screenWidth / 6,
+                        ),
+                        Container(
+                          width: screenWidth / 6,
+                        ),
+                        Container(
+                          width: screenWidth / 6,
+                        ),
+                      ],
               ),
             ),
           ),
@@ -144,20 +146,31 @@ class _HomePageState extends State<HomePage> {
               bottom: 0,
               child: GestureDetector(
                 onLongPress: () async {
-                  scanBarcode();
-                },
-                onDoubleTap: () async {
-                  HapticFeedback.mediumImpact();
-                  scanBarcodeContinuously();
-                },
-                child: NeumorphicButton(
-                  //style: ButtonStyle(splashFactory: NoSplash.splashFactory,),
-                  child: Container(
-                    width: screenWidth,
-                    height: screenHeight / 2,
-                  ),
-                ),
-              ),
+                        scanBarcode();
+                      },
+                      onDoubleTap: () async {
+                        HapticFeedback.mediumImpact();
+                        if (snapshot.hasData) {
+                          lists.clear();
+                          Map<dynamic, dynamic> values = snapshot.data!.value;
+                          values.forEach((key, values) {
+                            lists.add(values);
+                          });
+                        }
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) => Checkout()));
+                        scanBarcodeContinuously();
+                      },
+                      child: NeumorphicButton(
+                        //style: ButtonStyle(splashFactory: NoSplash.splashFactory,),
+                        child: Container(
+                          width: screenWidth,
+                          height: screenHeight / 2,
+                        ),
+                      ),
+                    ),
             ),
             Center(
               child: SizedBox(
@@ -166,27 +179,28 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Container(
                       padding: EdgeInsets.all(20),
-                      child: Text(
-                        'Barcode Scanner',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: widthBlock * 8,
-                        ),
+                            child: Text(
+                              'Barcode Scanner',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: widthBlock * 8,
+                              ),
+                            ),
+                          ),
+                          NeumorphicButton(
+                            margin: EdgeInsets.all(20),
+                            padding: EdgeInsets.all(15),
+                            onPressed: () {},
+                            child: Text('Scan Barcode'),
+                          ),
+                        ],
                       ),
                     ),
-                    NeumorphicButton(
-                      margin: EdgeInsets.all(20),
-                      padding: EdgeInsets.all(15),
-                      onPressed: () {},
-                      child: Text('Scan Barcode'),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
-      ),
+            );
+          }),
     );
   }
 
@@ -214,21 +228,21 @@ class _HomePageState extends State<HomePage> {
 
 
   Future<void> scanBarcodeContinuously() async {
-    final products = fb.reference().child('Products');
+    //final products = fb.reference().child('Products');
     FlutterBarcodeScanner.getBarcodeStreamReceiver(
-      "#ff2222", "Done", true, ScanMode.BARCODE)!.listen((barcode) {
-        HapticFeedback.selectionClick();
-        /*final product = products.child('Product: $barcode');
+            "#ff2222", "Checkout", true, ScanMode.BARCODE)!
+        .listen((barcode) {
+      HapticFeedback.selectionClick();
+      currentArr.add(barcode);
+      print(currentArr.last);
+      /*final product = products.child('Product: $barcode');
         product.once().then((DataSnapshot snapshot){
           Map<dynamic, dynamic> values=snapshot.value;
           products.child('Product: $barcode').update({
             'Pieces Left': values["Pieces Left"]-1,
           });
-
         });*/
-        currentArr.add(barcode);
-        print(currentArr);
-      });
+    });
   }
 }
 
