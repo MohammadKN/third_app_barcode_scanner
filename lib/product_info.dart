@@ -168,12 +168,8 @@ class _AllProductsState extends State<AllProducts> {
                           )
                       );
                     }
-                    return Positioned(
-                      top: 30,
-                      width: 0.0,
-                      child: Container(
-                          child: RefreshProgressIndicator()
-                      ),
+                    return Center(
+                        child: RefreshProgressIndicator()
                     );
                   }
               ),

@@ -146,31 +146,31 @@ class _HomePageState extends State<HomePage> {
               bottom: 0,
               child: GestureDetector(
                 onLongPress: () async {
-                        scanBarcode();
-                      },
-                      onDoubleTap: () async {
-                        HapticFeedback.mediumImpact();
-                        if (snapshot.hasData) {
-                          lists.clear();
-                          Map<dynamic, dynamic> values = snapshot.data!.value;
-                          values.forEach((key, values) {
-                            lists.add(values);
-                          });
-                        }
-                        Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                                builder: (context) => Checkout()));
-                        scanBarcodeContinuously();
-                      },
-                      child: NeumorphicButton(
-                        //style: ButtonStyle(splashFactory: NoSplash.splashFactory,),
-                        child: Container(
-                          width: screenWidth,
-                          height: screenHeight / 2,
-                        ),
-                      ),
+                    scanBarcode();
+                  },
+                onDoubleTap: () async {
+                  HapticFeedback.mediumImpact();
+                  if (snapshot.hasData) {
+                    lists.clear();
+                    Map<dynamic, dynamic> values = snapshot.data!.value;
+                    values.forEach((key, values) {
+                      lists.add(values);
+                    });
+                  }
+                  Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                          builder: (context) => Checkout()));
+                  scanBarcodeContinuously();
+                },
+                  child: NeumorphicButton(
+                    //style: ButtonStyle(splashFactory: NoSplash.splashFactory,),
+                    child: Container(
+                      width: screenWidth,
+                      height: screenHeight / 2,
                     ),
+                  ),
+              ),
             ),
             Center(
               child: SizedBox(
